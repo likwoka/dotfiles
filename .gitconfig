@@ -1,0 +1,7 @@
+[user]
+	email = likwoka@gmail.com
+	name = Alex Li
+[credential]
+	helper = cache --timeout=3600
+[core]
+	editor = vim
