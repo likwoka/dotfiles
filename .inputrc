@@ -1,0 +1,3 @@
+# Disable the readline bell
+set bell-style none
+
