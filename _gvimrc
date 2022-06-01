@@ -1,0 +1,123 @@
+"
+" Gopi's _gvimrc file https://github.com/GopinathMR
+" This file has been modified to make it work on both Windows and Linux
+" Github gist location : git://gist.github.com/1100054.git
+" If you find any issues or add any enhancements, please submit revised version as gist
+"----------------------------------------------------------------------------------------------------------
+
+" 1. OS specific
+
+    if ($OS == 'Windows_NT')
+        " Windows specific settings
+
+        " 1.1 Restore cursor to file position in previous editing session http://vim.wikia.com/wiki/VimTip80
+        set viminfo='10,\"100,:20,%,n$VIM/_viminfo
+
+        " 1.2 executing OS command within Vim
+        set shell=c:\Windows\system32\cmd.exe
+        " shell command flag
+        set shellcmdflag=/c
+
+		" from https://vi.stackexchange.com/questions/3093/how-can-i-change-the-font-size-in-gvim/3104#3104
+		function! FontSizePlus ()
+		  let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
+		  let l:gf_size_whole = l:gf_size_whole + 1
+		  let l:new_font_size = ':h'.l:gf_size_whole
+		  let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
+		endfunction
+
+		function! FontSizeMinus ()
+		  let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
+		  let l:gf_size_whole = l:gf_size_whole - 1
+		  let l:new_font_size = ':h'.l:gf_size_whole
+		  let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
+		endfunction		
+		
+    else
+        " Unix specific settings
+        " 1.1 : pick it from $HOME/.viminfo
+        set viminfo='10,\"100,:20,%,n~/.viminfo
+
+        " 1.2 executing OS command within Vim
+        set shell=/bin/csh
+
+		" from https://vi.stackexchange.com/questions/3093/how-can-i-change-the-font-size-in-gvim/3104#3104
+		function! FontSizePlus ()
+		  let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
+		  let l:gf_size_whole = l:gf_size_whole + 1
+		  let l:new_font_size = ' '.l:gf_size_whole
+		  let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
+		endfunction
+
+		function! FontSizeMinus ()
+		  let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
+		  let l:gf_size_whole = l:gf_size_whole - 1
+		  let l:new_font_size = ' '.l:gf_size_whole
+		  let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
+		endfunction		
+    endif
+
+"----------------------------------------------------------------------------------------------------------
+
+" 2. File compatibility and configuration issues
+    " Do not keep a backup or .swp file. I don't like to have junk files, my source is anyway in cvs/svn/p4/git.
+    set nobackup
+    set nowritebackup
+    set noswapfile
+    set nocompatible " Use Vim defaults (much better!), Vi is for 70's programmers!
+    set viminfo='20,\"50 " read/write a .viminfo file, don't store more than 50 lines of registers - http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
+    set ts=4 " tabstop - how many columns should the cursor move for one tab
+    set sw=4 " shiftwidth - how many columns should the text be indented
+    set expandtab " always expands tab to spaces. It is good when peers use different editor.
+    set wrap " wraps longs lines to screen size
+	
+"----------------------------------------------------------------------------------------------------------
+
+" 3. Color, Look&Feel Configuration
+
+    " Use courier-new font
+    set guifont=JetBrains_Mono_NL:h9
+	"set guifont=Consolas:h10
+    "set guifont=Courier_New:h11
+    "set guifont=Terminal:h6
+    "set guifont=Courier:h10
+    "set colorscheme to midnight. Use the command :colorscheme <schemeName> for setting other color schemes
+    "colorscheme darkbone
+    "colorscheme darkblue
+    " Use different color schemes for different set of files.
+    "au BufEnter *.* colorscheme zellner
+    "au BufEnter *.log colorscheme desert
+    "au BufEnter *.build colorscheme darkbone
+    "au BufEnter *.txt colorscheme darkbone
+
+    " Customize Status line color of current window & non-current windows
+    highlight StatusLineNC guifg=SlateBlue guibg=Yellow
+    highlight StatusLine guifg=Gray guibg=White
+
+    set vb t_vb= " stop beeping or flashing the screen
+
+"----------------------------------------------------------------------------------------------------------
+
+" 5. Working with split windows and tabs
+    " 5.1 Working with tabs
+    "~~~~~~~~~~~~~~~~~~~~~~~
+    if version >= 700
+        " always enable Vim tabs
+        set showtabline=2
+        " set tab features just like browser
+        " open tab, close tab, next tab, previous tab (just like Chrome and Firefox keyboard shortcuts)
+      map <C-t> <Esc>:tabnew<CR>
+      map <C-F4> <Esc>:tabclose<CR>
+      map <C-Tab> <Esc>:tabnext<CR>
+      map <C-S-Tab> <Esc>:tabprev<CR>
+    endif
+	
+"----------------------------------------------------------------------------------------------------------	
+
+" Alex
+	set smartindent
+	set expandtab
+	set number
+	syntax on
+	map + :call FontSizePlus()<cr>
+	map - :call FontSizeMinus()<cr>
